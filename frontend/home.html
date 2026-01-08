@@ -1,0 +1,355 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Home</title>
+  <style>
+    body { font-family: Arial; background: #f2f2f2; padding: 20px; }
+    .post { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 8px; }
+    img { width: 300px; display: block; margin-top: 10px; }
+    input, button { margin-top: 8px; }
+    .comment { margin-left: 20px; font-size: 14px; }
+
+
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    padding: 20px;
+    max-width: 900px;
+    margin: auto;
+  }
+
+  h1, h3 {
+    color: #333;
+  }
+
+  button {
+    background: #4f46e5;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  button:hover {
+    background: #4338ca;
+  }
+
+  input[type="text"],
+  input[type="file"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 6px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+
+  hr {
+    margin: 25px 0;
+    border: none;
+    border-top: 1px solid #ddd;
+  }
+
+  .post {
+    background: #ffffff;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+  }
+
+  .post b {
+    font-size: 16px;
+    color: #111827;
+  }
+
+  .post img {
+    width: 100%;
+    max-width: 350px;
+    margin-top: 10px;
+    border-radius: 8px;
+  }
+
+  .post p {
+    margin-top: 10px;
+    color: #374151;
+  }
+
+  .post button {
+    margin-right: 5px;
+    margin-top: 6px;
+  }
+
+  .comment {
+    margin-left: 20px;
+    margin-top: 6px;
+    padding: 6px 10px;
+    background: #f1f5f9;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  .comment button {
+    background: transparent;
+    color: #2563eb;
+    padding: 0;
+    margin-left: 6px;
+    font-size: 13px;
+  }
+
+  .comment button:hover {
+    text-decoration: underline;
+  }
+
+  #posts > .post > div {
+    margin-top: 10px;
+  }
+
+  input[id^="comment-input"] {
+    width: calc(100% - 90px);
+    display: inline-block;
+  }
+
+  input[id^="comment-input"] + button {
+    margin-left: 5px;
+  }
+</style>
+
+
+  </style>
+</head>
+<body>
+<h1>Home Page</h1>
+<button onclick="logout()">Logout</button>
+
+<hr>
+
+<h3>Create Post</h3>
+<input type="file" id="image" required>
+<br>
+<input type="text" id="caption" placeholder="Write a caption">
+<br>
+<button onclick="createPost()">Post</button>
+
+<hr>
+
+<h3>All Posts</h3>
+<div id="posts"></div>
+
+<script>
+/* AUTH  */
+if (localStorage.getItem("auth") !== "true") {
+  window.location.href = "login.html";
+}
+
+function logout() {
+  localStorage.removeItem("auth");
+  window.location.href = "login.html";
+}
+
+let CURRENT_USER_ID = null;
+
+/* 🔐 GET CURRENT USER */
+async function loadMe() {
+  const res = await fetch("http://localhost:8081/severletpage/me", {
+    credentials: "include"
+  });
+
+  if (res.status === 401) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  const data = await res.json();
+  CURRENT_USER_ID = data.userId;
+  // alert(CURRENT_USER_ID);
+}
+
+/* POSTS  */
+async function createPost() {
+  const formData = new FormData();
+  formData.append("image", document.getElementById("image").files[0]);
+  formData.append("caption", document.getElementById("caption").value);
+
+  const res = await fetch("http://localhost:8081/severletpage/createpost", {
+    method: "POST",
+    credentials: "include",
+    body: formData
+  });
+
+  const data = await res.json();
+  if (data.success) loadPosts();
+}
+
+async function loadPosts() {
+  const res = await fetch("http://localhost:8081/severletpage/posts", {
+    credentials: "include"
+  });
+
+  if (res.status === 401) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  const posts = await res.json();
+  const container = document.getElementById("posts");
+  container.innerHTML = "";
+  console.log("CURRENT_USER_ID at loadPosts:", CURRENT_USER_ID);
+console.log("Posts loaded:", posts);
+  posts.forEach(p => {
+    const isOwner = p.user_id === CURRENT_USER_ID;
+  console.log("CURRENT_USER_ID at loadPosts:",  p.user_id);
+console.log("isOwner:", isOwner);
+    // console.log("CURRENT_USER_ID:", CURRENT_USER_ID, "POST_USER_ID:", p.user_id, "isOwner:", isOwner);
+    container.innerHTML += `
+      <div class="post">
+        <b>${p.username}</b>
+        <img src="http://localhost:8081/severletpage/${p.image_path}">
+        <p id="caption-${p.id}">${p.caption}</p>
+
+        ${isOwner ? `
+          <button onclick="enableEditPost(${p.id})">Edit</button>
+          <button onclick="deletePost(${p.id})">Delete</button>
+        ` : ``}
+
+        <div>
+  <input id="comment-input-${p.id}"
+         placeholder="Write comment">
+  <button onclick="submitComment(${p.id})">Comment</button>
+  <div id="comments-${p.id}"></div>
+</div>
+
+      </div>
+    `;
+    loadComments(p.id);
+  });
+}
+
+function submitComment(postId) {
+  const input = document.getElementById(`comment-input-${postId}`);
+  const text = input.value.trim();
+  if (!text) return;
+             console.log("Submitting comment:", text);
+  fetch("http://localhost:8081/severletpage/add-comment", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: `postId=${postId}&comment=${encodeURIComponent(text)}`
+  }).then(() => loadComments(postId));
+
+  input.value = "";
+}
+
+
+function deletePost(id) {
+  fetch(`http://localhost:8081/severletpage/delete-post?id=${id}`, {
+    method: "DELETE",
+    credentials: "include"
+  }).then(loadPosts);
+}
+
+function enableEditPost(postId) {
+  const el = document.getElementById(`caption-${postId}`);
+  const old = el.innerText;
+  el.innerHTML = `
+    <input id="edit-post-${postId}" value="${old}">
+    <button onclick="savePost(${postId})">Save</button>
+  `;
+}
+
+function savePost(postId) {
+  const caption = document.getElementById(`edit-post-${postId}`).value;
+  console.log("Saving post:", postId, "with caption:", caption);
+  fetch("http://localhost:8081/severletpage/edit-post", {
+    method: "POST",
+    credentials: "include",
+    headers: {"Content-Type": "application/x-www-form-urlencoded"},
+    body: `postId=${postId}&caption=${encodeURIComponent(caption)}`
+  }).then(loadPosts);
+}
+
+/*  COMMENTS */
+function addComment(e, postId) {
+  if (e.key === "Enter") {
+    fetch("http://localhost:8081/severletpage/add-comment", {
+      method: "POST",
+      credentials: "include",
+      headers: {"Content-Type": "application/x-www-form-urlencoded"},
+      body: `postId=${postId}&comment=${encodeURIComponent(e.target.value)}`
+    }).then(() => loadComments(postId));
+
+    e.target.value = "";
+  }
+}
+
+async function loadComments(postId) {
+  const res = await fetch(
+    `http://localhost:8081/severletpage/comments?postId=${postId}`,
+    { credentials: "include" }
+  );
+
+  const comments = await res.json();
+  const div = document.getElementById(`comments-${postId}`);
+  div.innerHTML = "";
+
+  comments.forEach(c => {
+    const isOwner = c.user_id === CURRENT_USER_ID;
+
+    div.innerHTML += `
+      <div class="comment" id="comment-${c.id}">
+        • ${c.username}:
+        <span id="comment-text-${c.id}">${c.comment}</span>
+
+        ${isOwner ? `
+          <button onclick="editComment(${c.id}, '${c.comment}')">Edit</button>
+          <button onclick="deleteComment(${c.id}, ${postId})">Delete</button>
+        ` : ``}
+      </div>
+    `;
+  });
+}
+
+function editComment(id, text) {
+  document.getElementById(`comment-${id}`).innerHTML = `
+    <input id="edit-comment-${id}" value="${text}">
+    <button onclick="saveComment(${id})">Save</button>
+  `;
+}
+
+function saveComment(id) {
+  const text = document.getElementById(`edit-comment-${id}`).value;
+  fetch("http://localhost:8081/severletpage/edit-comment", {
+    method: "POST",
+    credentials: "include",
+    headers: {"Content-Type": "application/x-www-form-urlencoded"},
+    body: `commentId=${id}&comment=${encodeURIComponent(text)}`
+  }).then(loadPosts);
+}
+
+function deleteComment(id, postId) {
+  fetch(`http://localhost:8081/severletpage/delete-comment?commentId=${id}`, {
+    method: "DELETE",
+    credentials: "include"
+  }).then(() => loadComments(postId));
+}
+
+
+// runs first to get the data
+(async () => {
+  await loadMe();
+  loadPosts();
+})();
+</script>
+
+</body>
+</html>
+
