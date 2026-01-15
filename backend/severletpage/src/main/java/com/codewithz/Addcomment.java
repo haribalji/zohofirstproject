@@ -14,7 +14,7 @@ public class Addcomment extends HttpServlet {
         System.out.println("lets begin the adding comment");
         HttpSession session = req.getSession(false);
         if (session == null || session.getAttribute("userId") == null) {
-//            they did not have valid permission
+//      they did not have valid permission
             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
@@ -36,13 +36,15 @@ public class Addcomment extends HttpServlet {
             ps.setString(3, comment);
             ps.executeUpdate();
 
-            res.setStatus(HttpServletResponse.SC_OK);
+            res.setStatus(HttpServletResponse.SC_OK);//all ok 200
 
         } catch (Exception e) {
-
+//due to run time exeception
             e.printStackTrace();
 //            raise the server error
             res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            // sets the HTTP response status code to 500. that means issues in server side
+//            it also not stop the execution of program
         }
     }
 }

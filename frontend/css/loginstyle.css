@@ -1,0 +1,62 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login-box {
+  background: white;
+  width: 320px;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.login-page h2 {
+  margin-bottom: 20px;
+  color: #111827;
+}
+
+.login-page input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.login-page input:focus {
+  outline: none;
+  border-color: #4f46e5;
+}
+/* horizontal password + checkbox */
+.password-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.password-row input[type="password"] {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+/* Inline checkbox */
+.show-password-inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.show-password-inline input[type="checkbox"] {
+  margin: 0;
+  width: 14px;
+  height: 14px;
+}

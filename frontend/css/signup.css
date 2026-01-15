@@ -1,0 +1,73 @@
+
+.signup-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.signup-box {
+  background: white;
+  width: 340px;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.signup-page h2 {
+  margin-bottom: 20px;
+  color: #111827;
+}
+
+.signup-page input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.signup-page input:focus {
+  outline: none;
+  border-color: #4f46e5;
+}
+
+
+
+
+
+/* Password row horizontal layout */
+.password-row {
+  display: flex;
+  
+  align-items: center;
+  gap: 10px;
+}
+
+/* Password input takes remaining space */
+.password-row input[type="password"] {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+/* Show password inline */
+.show-password-inline {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* checkbox normalize */
+.show-password-inline input[type="checkbox"] {
+  margin: 0;
+  width: 14px;
+  height: 14px;
+}
+

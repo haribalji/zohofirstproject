@@ -1,17 +1,15 @@
 package com.codewithz;
 import com.post.db.dbconnection;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-
 @WebServlet("/edit-comment")
 public class Editcomment extends HttpServlet {
-
     public void doPost(HttpServletRequest req, HttpServletResponse res)
-            throws IOException {
-
+            throws IOException ,ServletException {
         HttpSession session = req.getSession(false);
         if (session == null || session.getAttribute("userId") == null) {
             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -21,7 +19,6 @@ public class Editcomment extends HttpServlet {
         int userId = (int) session.getAttribute("userId");
         int commentId = Integer.parseInt(req.getParameter("commentId"));
         String comment = req.getParameter("comment");
-
         String sql = "UPDATE comments SET comment=? WHERE id=? AND user_id=?";
 //                id is comment id
         try (Connection con = dbconnection.getConnection();
@@ -42,7 +39,8 @@ public class Editcomment extends HttpServlet {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace();//printing the error in console
+            throw new ServletException(" error", e);
         }
     }
 }

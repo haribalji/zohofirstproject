@@ -1,0 +1,31 @@
+<div class="page login-page">
+  <form class="login-box" onsubmit="event.preventDefault(); login();">
+    <h2>Login</h2>
+    <div class="field">
+          <input  maxlength="20"
+ id="username" placeholder="Username">
+
+      <div id="usernameError" class="error"></div>
+    </div>
+
+<div class="field password-row">
+  <input id="password" type="password"   placeholder="Password">
+
+  
+</div>
+<div class="show-password-inline">
+<input type="checkbox" onclick="togglePassword()">
+    <span>Show password</span>
+</div>
+    <div id="passwordError" class="error"></div>
+    <button type="submit" class="btn btn-primary">Login</button>
+    <div class="link">
+      New user? <a href="#signup">Signup</a>
+    </div>
+  </form>
+</div>
+
+
+
+
+

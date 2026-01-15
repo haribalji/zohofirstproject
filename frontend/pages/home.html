@@ -1,0 +1,45 @@
+<div class="page home-page">
+  <!-- navbar -->
+  <div class="navbar">
+    <h2>postApp</h2>
+    <div class="nav-icons">
+      <i class="fa-solid fa-plus" onclick="openPostModal()"></i>
+      <i class="fa-solid fa-right-from-bracket" onclick="logout()"></i>
+    </div>
+  </div>
+
+  <!-- modal for post creation -->
+  <div class="modal" id="postModal" onclick="closePostModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <h3>Create Post</h3>
+      <label for="image" class="file-upload" >
+              <i class="fa-solid fa-image"></i>
+              choose image
+              </label>
+      <input type="file" id="image" accept="image/*" class="hidden-file-input" >
+      <span id="fileName" class="file-name">No file selected</span>
+
+      <input type="text" id="caption" placeholder="Write a caption">
+      <button class="btn btn-primary" onclick="createPost()">Post</button>
+      <button class="btn btn-danger" onclick="closePostModal()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- post feed-->
+  <div class="container">
+    <div id="posts"></div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+

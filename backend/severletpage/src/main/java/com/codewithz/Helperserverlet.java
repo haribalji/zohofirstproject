@@ -25,8 +25,6 @@ public class Helperserverlet  extends HttpServlet   {
 //        System.out.println(req.getParameter("value"));
 
 
-
-
 //        httpsession workout
 //        HttpSession session=req.getSession();
 //        int value=(int)session.getAttribute("value");

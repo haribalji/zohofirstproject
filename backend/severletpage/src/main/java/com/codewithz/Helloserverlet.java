@@ -12,9 +12,7 @@ public class Helloserverlet extends HttpServlet{
     public void doGet(HttpServletRequest req, HttpServletResponse res)
  throws ServletException ,IOException
 //instructing the tomcat if anything bad happen handle it
-
     {
-
 //        it is the 2 object that created by the tomcat that is used to
 //        used to get the request  from the client and  send the response to the client
 
@@ -31,8 +29,6 @@ public class Helloserverlet extends HttpServlet{
 //        req.setAttribute("value",100);
 // here we are forwarding to nextpages
 //        rd.forward(req,res);
-
-
 //    another way of commnication from one serverlet to another serverlet is sendredirect
 //res send to client(saying to go to 2 servelet) then from their browser sent the data to serverlet2
 //      res.sendRedirect("help?value="+100);
@@ -42,7 +38,6 @@ public class Helloserverlet extends HttpServlet{
 
 
 //       maintaining the httpsession
-
 
 
 

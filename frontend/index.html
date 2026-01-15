@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Post App SPA</title>
+
+  <!-- Prevent cache -->
+  <meta http-equiv="Cache-Control" content="no-store" />
+<!-- not allowing the browser to store the cache -->
+<!-- <link rel="stylesheet" href="css/style.css"> -->
+
+<link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/signup.css">
+<link rel="stylesheet" href="css/loginstyle.css">
+<link rel="stylesheet" href="css/htmlstyle.css">
+
+  <style>
+ 
+  </style>
+</head>
+
+
+<!--  # called as fragment identifirer
+   beacuse of which the browser will not reload when we move from one 
+   section to another section of the single page
+
+-->
+
+
+
+<!-- single page application -->
+<div id="app"></div>
+
+
+<!-- this showing  for deleting the post -->
+  <div id="confirmOverlay" class="confirm-overlay">
+    <div class="confirm-box">
+      <p id="confirmMessage"></p>
+      <div class="confirm-actions">
+        <button id="confirmYes">Delete</button>
+        <button id="confirmNo">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+
+
+<script src="router.js"></script>
+<script src="/frontend/controller/home.js"></script>
+<script src="/frontend/controller/login.js"></script>
+<script src="/frontend/controller/signup.js"></script>
+
+
+
+
+<div id="toast" class="toast"></div>
+
+</body>
+</html>

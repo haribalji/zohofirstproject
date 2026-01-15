@@ -12,9 +12,9 @@ public class Myuser extends HttpServlet {
 
         HttpSession session = req.getSession(false);
 
-        // 🔒 Not logged in
+        //  Not logged in
         if (session == null || session.getAttribute("userId") == null) {
-            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);//
             return;
         }
 
