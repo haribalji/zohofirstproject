@@ -21,6 +21,13 @@ function signup() {
   }
   // Email validation
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // here the characters before @ should not have spaces
+  // after @ should not have spaces
+  // 2 @ is not allowed
+  //domain is required after @
+  // then . then com or org or in
+
   if (email === "") {
     document.getElementById("emailError").innerText = "Email is required";
     isValid = false;
@@ -60,6 +67,8 @@ else if (!passwordPattern.test(password)) {
     credentials: "include",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
+      // Form data is sent as key=value pairs joined by &, and special characters 
+      // are URL-encoded. with some ther character
     },
     body: new URLSearchParams({
       username: username,

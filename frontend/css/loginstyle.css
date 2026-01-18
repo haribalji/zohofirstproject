@@ -1,5 +1,6 @@
 .login-page {
   min-height: 100vh;
+  /* it says the element height never become shorter than  */
   display: flex;
   justify-content: center;
   align-items: center;

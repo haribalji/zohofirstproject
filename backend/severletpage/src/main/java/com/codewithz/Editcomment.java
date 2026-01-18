@@ -31,15 +31,15 @@ public class Editcomment extends HttpServlet {
             int updated = ps.executeUpdate();
 
             if (updated == 0) {
-//                accept the request but not have access to edit the resouces
-                res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+//             accept the request but not have access to edit the resouces
+                res.setStatus(HttpServletResponse.SC_FORBIDDEN);//403
             } else {
 //                ok status
                 res.setStatus(HttpServletResponse.SC_OK);
             }
 
         } catch (Exception e) {
-            e.printStackTrace();//printing the error in console
+            // e.printStackTrace();//printing the error in console
             throw new ServletException(" error", e);
         }
     }

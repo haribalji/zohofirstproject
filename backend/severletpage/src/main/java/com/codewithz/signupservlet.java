@@ -41,7 +41,6 @@ public class signupservlet extends HttpServlet {
             out.print("{\"success\": true}");
         } catch (Exception e) {
             out.print("{\"success\": false}");
-           throw new ServletException("Signup failed", e);
         }
     }
 

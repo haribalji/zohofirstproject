@@ -4,6 +4,7 @@
 
 body {
   margin: 0;
+  /* //removing  browser margin*/
   font-family: Arial, sans-serif;
   background: #f4f6f8;
 }

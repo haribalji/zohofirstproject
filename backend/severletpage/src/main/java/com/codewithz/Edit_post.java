@@ -40,7 +40,7 @@ public class Edit_post extends HttpServlet {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();//error is printed by us
+            // e.printStackTrace();//error is printed by us in console used 
             throw new ServletException(" error", e);//here the error is printed by
 
         }

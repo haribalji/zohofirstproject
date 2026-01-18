@@ -42,6 +42,7 @@ async function loadPage() {
 }
 
 //  Detect back / forward (your logic)
+// it run again and again to check the hash value
 setInterval(() => {
   if (window.location.hash !== currentHash) {
     currentHash = window.location.hash;
@@ -50,6 +51,8 @@ setInterval(() => {
     loadPage();
   }
 }, 100);
+// if we want to stop this interval then use clearinterval(id); as this 
+// we can get it from setinterval method
 
 // to show the message to user
 function showToast(message, duration = 3000) {
@@ -61,6 +64,10 @@ function showToast(message, duration = 3000) {
   setTimeout(() => {
     toast.classList.remove("show");
   }, duration);//after duration it will remove the toast message
+// if we want to stop this timeout then use clearTimeout(id); as this 
+// we can get it from setTimeout method
+
+
 }
 
 //for asking yes or no from user

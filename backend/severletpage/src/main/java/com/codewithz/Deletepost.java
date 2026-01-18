@@ -40,7 +40,6 @@ public class Deletepost extends HttpServlet {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
 //prints the full error details of an exception to the server console or logs.
 //      res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500
 //    here we writing the response maually

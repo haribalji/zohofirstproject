@@ -34,23 +34,49 @@ function logout() {
   });
 }//
 // this is for getting the user id
-async function loadMe() {
-  const res = await fetch("http://localhost:8081/severletpage/me",
-    { 
-      credentials: "include" 
+// async function loadMe() {
+//   const res = await fetch("http://localhost:8081/severletpage/me",
+//     { 
+//       credentials: "include" 
 
-    }
-  );
+//     }
+//   );
 
-// if the user did not have access then 
-  if (res.status === 401) throw "unauthorized";
+// // if the user did not have access then 
+//   if (res.status === 401) throw "unauthorized";
   
 
-  const data = await res.json();
-  CURRENT_USER_ID = data.userId;
+//   const data = await res.json();
+//   CURRENT_USER_ID = data.userId;
+
+//   // here if it is nothing returning also it will considerd as promise resolved
+// }
+
+async function loadMe() {
+  try {
+    const res = await fetch("http://localhost:8081/severletpage/me", {
+      credentials: "include"
+    });
+
+    // user not authenticated
+    if (res.status === 401) {
+      throw new Error("unauthorized");
+    }
+
+    const data = await res.json();
+    CURRENT_USER_ID = data.userId;
 
   // here if it is nothing returning also it will considerd as promise resolved
+  } catch (err) {//
+    //  401  not logined in
+    showToast("loadMe failed:", 3000);
+  }
 }
+
+
+
+
+
 // 
 /*  POSTS  */
 
@@ -157,6 +183,7 @@ async function createPost() {
     //to understand it also//this work did by browser automically
     credentials: "include",//hold the cookies for session id
     body: formData
+    // FormData is a JavaScript object used to collect and send form data, especially when you need to send files + text together.
   });
 
   const data = await res.json();
@@ -221,8 +248,12 @@ function savePost(postId) {
   fetch("http://localhost:8081/severletpage/edit-post", {
     method: "POST",
     credentials: "include",
-    headers: {"Content-Type": "application/x-www-form-urlencoded"},
+    headers: {"Content-Type": "application/x-www-form-urlencoded"},//The data i am sending is already URL-encoded
     body: `postId=${postId}&caption=${encodeURIComponent(caption)}`
+    //when  caption = "Nice post & good work"
+    // postId=12&caption=Nice post & good work, the encodeURIComponent can convert it differenty
+    // postId=12&caption=hello%20world
+    // note your manually converting the data into url encoded format
   }).then(loadPosts);
 }
 

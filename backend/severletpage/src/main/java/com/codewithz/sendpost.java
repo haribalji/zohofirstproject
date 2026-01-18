@@ -51,8 +51,7 @@ public class sendpost extends HttpServlet {
             res.getWriter().print(json);
 
         } catch (Exception e) {
-            System.out.println("error");
-
+             e.printStackTrace();
         }
     }
 }

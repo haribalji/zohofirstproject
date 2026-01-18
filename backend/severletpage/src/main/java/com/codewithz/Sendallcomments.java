@@ -39,7 +39,8 @@ public class Sendallcomments extends HttpServlet {
             res.getWriter().print(json);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace();//it is used to print the error in console
+            // 
         }
     }
 }

@@ -14,7 +14,10 @@
     let isValid = true;
 const passwordPattern =
   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
-
+// at least 6 characters
+//  at least one letter (A–Z or a–z)
+//  at least one number (0–9)
+//  at least one special character (@$!%*?&)
     // Username validation
     if (username === "") {
       document.getElementById("usernameError").innerText =
