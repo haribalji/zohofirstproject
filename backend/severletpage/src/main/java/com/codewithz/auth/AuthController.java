@@ -18,7 +18,9 @@ import java.util.List;
 @MultipartConfig
 @WebServlet("/auth/*")
 public class AuthController extends HttpServlet {
-
+private static final String CLIENT_ID = System.getenv("GOOGLE_CLIENT_ID");
+private static final String CLIENT_SECRET = System.getenv("GOOGLE_CLIENT_SECRET");
+private static final String REDIRECT_URI = System.getenv("GOOGLE_REDIRECT_URI");
 private GoogleIdToken.Payload decodeIdToken(String idTokenString) {
         try {
             List<String> audiences = List.of(CLIENT_ID);//more that one id
