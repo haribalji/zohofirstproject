@@ -39,30 +39,23 @@ body {
   margin-bottom: 8px;
   text-align: left;
 }
-
 .link {
   margin-top: 12px;
   font-size: 14px;
 }
-
 .link a {
   color: #4f46e5;
   text-decoration: none;
 }
-
 .link a:hover {
   text-decoration: underline;
 }
-
 .show-password {
   display: flex;
   justify-content: flex-end;
   font-size: 13px;
   margin-bottom: 6px;
 }
-
-
-
 /* this for toaster style */
 .toast {
   position: fixed;
@@ -80,14 +73,11 @@ body {
   transition: opacity 0.3s ease, transform 0.3s ease;
   z-index: 9999;
 }
-
 .toast.show {
   opacity: 1;
   /* to make the elemeent visible */
   transform: translateY(0);
 }
-
-
 .toast {
   position: fixed;   /* MOST IMPORTANT */
   top: 20px;
@@ -97,17 +87,12 @@ body {
   padding: 12px 18px;
   border-radius: 6px;
   font-size: 14px;
-
   opacity: 0;
   transform: translateY(-10px);
   transition: opacity 0.3s ease, transform 0.3s ease;
-
   z-index: 9999;     /* stays above everything */
   pointer-events: none; /* does NOT block clicks */
 }
-
-
-
 .confirm-overlay {
   position: fixed;
   inset: 0;
@@ -117,7 +102,6 @@ body {
   justify-content: center;
   z-index: 99999;        
 }
-
 .confirm-box {
   background: white;
   padding: 20px;
@@ -131,3 +115,25 @@ body {
   display: flex;
   justify-content: space-between;
 }
+/* for google button */
+.google-button {
+  margin-top: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #444;
+    text-decoration: none;
+}
+.google-button img {
+    width: 18px;
+    height: 18px;
+}
+
+
+

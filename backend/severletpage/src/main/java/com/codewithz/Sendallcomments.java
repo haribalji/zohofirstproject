@@ -1,11 +1,9 @@
 package com.codewithz;
-import com.post.db.dbconnection;
+import com.post.db.DataBaseConnection;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-
 import java.io.IOException;
 import java.sql.*;
-
 @WebServlet("/comments")
 public class Sendallcomments extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse res)
@@ -18,7 +16,7 @@ public class Sendallcomments extends HttpServlet {
         String sql = "SELECT c.id, c.comment, c.user_id, u.username " +
                         "FROM comments c JOIN users u ON c.user_id = u.id " +
                         "WHERE c.post_id=? ORDER BY c.id";
-        try (Connection con = dbconnection.getConnection();
+        try (Connection con = DataBaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, postId);
             ResultSet rs = ps.executeQuery();

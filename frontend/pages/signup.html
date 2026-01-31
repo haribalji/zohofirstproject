@@ -7,7 +7,9 @@
   
  id="username" placeholder="Username" >
       <div id="usernameError" class="error"></div>
+   
     </div>
+
 
     <div class="field">
       <input id="email" placeholder="Email">
@@ -17,20 +19,47 @@
     <div class="field password-row">
   <input id="password" type="password"   placeholder="Password">
 
-
 </div>
+
+
 <div class="show-password-inline">
 <input type="checkbox" onclick="togglePassword()">
     <span>Show password</span>
 </div>
-
-
     <div id="passwordError" class="error"></div>
+
+
+
+  <div class="field">
+     <label for="profileImage" class="file-upload" >
+           
+      <i class="fa-solid fa-image"></i>   Your Profile image
+              </label>
+  <input  type="file" id="profileImage" accept="image/*"  class="hidden-file-input " >
+       <span id="fileName" class="file-name">No file selected</span>
+
+  <div id="imageError" class="error">
+
+  </div>
+
+</div>
+
 
     <button type="submit" class="btn btn-primary">Signup</button>
 
+    <div class="signinloginbutton">
     <div class="link">
       Already have an account? <a href="#login">Login</a>
     </div>
+
+  
+<a class="google-button"   href="http://localhost:8081/severletpage/auth/google_login">
+   <img src="https://developers.google.com/identity/images/g-logo.png" alt="G">
+   Login in with Google
+</a>
+
+</div>
+  
   </form>
+
 </div>

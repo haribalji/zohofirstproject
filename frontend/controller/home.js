@@ -1,30 +1,25 @@
-
 let CURRENT_USER_ID = null;
-
 /*  it will be called when the this going to render */
-function initHome() {
-  console.log(" home apppered");
 
+function initHome() {
   // when the auth is not their then move to login
   if (!localStorage.getItem("auth")) {
     location.hash = "#login";
     return;
   }
-
   // then try to run the load me to get the user details
-
   loadMe()
     .then(loadPosts)
     .catch(() => {
+      // if any failure in getting the data then move login
       localStorage.removeItem("auth");
       location.hash = "#login";
     });
 }
-
 /*  AUTH  */
-
 function logout() {
-  fetch("http://localhost:8081/severletpage/logout", {
+  fetch("http://localhost:8081/severletpage/auth/logout", {
+        method: "POST",
     credentials: "include"
   }).finally(() => {
     // if we get the pos or neg it will run and logout
@@ -33,59 +28,33 @@ function logout() {
     location.hash = "#login";
   });
 }//
-// this is for getting the user id
-// async function loadMe() {
-//   const res = await fetch("http://localhost:8081/severletpage/me",
-//     { 
-//       credentials: "include" 
-
-//     }
-//   );
-
-// // if the user did not have access then 
-//   if (res.status === 401) throw "unauthorized";
-  
-
-//   const data = await res.json();
-//   CURRENT_USER_ID = data.userId;
-
-//   // here if it is nothing returning also it will considerd as promise resolved
-// }
 
 async function loadMe() {
   try {
-    const res = await fetch("http://localhost:8081/severletpage/me", {
+    const res = await fetch("http://localhost:8081/severletpage/auth/me", {
       credentials: "include"
     });
-
+    console.log("loadMe response status:", res.status);
     // user not authenticated
     if (res.status === 401) {
       throw new Error("unauthorized");
     }
-
     const data = await res.json();
     CURRENT_USER_ID = data.userId;
-
   // here if it is nothing returning also it will considerd as promise resolved
   } catch (err) {//
     //  401  not logined in
     showToast("loadMe failed:", 3000);
+    // inorder to inform the parent method call about the  error
+    throw new Error("unauthorized");
   }
 }
-
-
-
-
-
-// 
-/*  POSTS  */
-
+/*  POSTS */
 async function loadPosts() {
   const container = document.getElementById("posts");
-  // console.log(container);
   if (!container) return;//it checks first element  is present or not if not nulll
 
-  const res = await fetch( "http://localhost:8081/severletpage/posts",
+  const res = await fetch( "http://localhost:8081/severletpage/UserPost/posts",
     { 
       credentials: "include"
      }
@@ -98,10 +67,27 @@ async function loadPosts() {
 
   posts.forEach(p => {
     const isOwner = p.user_id === CURRENT_USER_ID;
-
+   console.log(p.image_path);
     container.innerHTML += `
       <div class="post">
-        <b>${p.username}</b>
+      <div class="post-header">
+      <img 
+  class="profile-img post-profile-img"    
+style="
+   width: 20px;         
+  height: 20px;
+  margin-top:0px;
+  border: 1px solid #e0e0e0;"
+    <img class="profile-img post-profile-img"    
+style="
+   width: 20px;         
+  height: 20px;
+  border: 1px solid #e0e0e0;"
+      src="${ p.userimagepath?.startsWith('https')? p.userimagepath: `http://localhost:8081/severletpage/${p.userimagepath}`
+  }"
+  >
+      <b >${p.username}</b>
+    </div>
         <img src="http://localhost:8081/severletpage/${p.image_path}">
         <p id="caption-${p.id}">${p.caption}</p>
 
@@ -128,7 +114,6 @@ async function loadPosts() {
 
 
 }
-
 // for have comfirmation check before deleting the post
 async function confirmDeletePost(postId) {
   console.log( "confirm delete post:", postId);
@@ -150,8 +135,6 @@ console.log("deleting comment:", commentId);
   }
 }
 
-
-
 // opening and closeing  model
 function openPostModal() {
   document.getElementById("postModal").style.display = "flex";
@@ -163,20 +146,28 @@ function closePostModal(event) {
   }
 }
 
-
-
-
-
-
-
 // creating the post 
 async function createPost() {
   const formData = new FormData();
-  formData.append("image", document.getElementById("image").files[0] //selected file
-  );
-  formData.append("caption", document.getElementById("caption").value);
+if (document.getElementById("image").files.length > 0) {
+  formData.append("image", document.getElementById("image").files[0]);
+}
+else{
+  showToast("image requried",2000);
+  return;
+}
 
-  const res = await fetch("http://localhost:8081/severletpage/createpost", {
+
+if(document.getElementById("caption").value==""){
+   
+  
+  showToast("caption requried",2000);
+  return;
+
+}
+
+  formData.append("caption", document.getElementById("caption").value);
+  const res = await fetch("http://localhost:8081/severletpage/UserPost/create", {
     method: "POST",
     //  multipart/form-data browser sets it automically  as here along with boundary need to be specify which states
     // start and binary data ends and where the text begin we need
@@ -185,14 +176,14 @@ async function createPost() {
     body: formData
     // FormData is a JavaScript object used to collect and send form data, especially when you need to send files + text together.
   });
-
   const data = await res.json();
-  
-  if (data.success) {
+  if (data.success){
         showToast("Post created successfully!",3000);
   }
   else{
-        showToast("Failed to create post",3000);  
+    console.log(data.success);
+    console.log("post creation failed:",data.message);
+        showToast(data.message,3000);  
   }
      closePostModal();
        loadPosts();
@@ -201,7 +192,7 @@ async function createPost() {
 
 function deletePost(id) {
   // note fetch also a promise 
-  fetch(`http://localhost:8081/severletpage/delete-post?id=${id}`, {
+  fetch(`http://localhost:8081/severletpage/UserPost/delete-post?id=${id}`, {
     method: "DELETE",
     credentials: "include"
   })
@@ -211,6 +202,7 @@ function deletePost(id) {
     // it checks for status code 200-299
     // if not  false other status  means any other issues
     // throw a error to make the promise fail and got to catch
+
     throw new Error("Failed to delete post");
   }
  
@@ -224,6 +216,8 @@ function deletePost(id) {
   // it will be called when the promise is rejected
   //err it contails error messsage, errorstack-->  where does error has happened
       console.error(err);
+        showToast(err.message, 3000);
+
       showToast("post was not deleted",1000);
 
 });
@@ -245,25 +239,26 @@ function enableEditPost(postId) {
 function savePost(postId) {
   const caption = document.getElementById(`edit-post-${postId}`).value;
 
-  fetch("http://localhost:8081/severletpage/edit-post", {
+  fetch("http://localhost:8081/severletpage/UserPost/edit-post",{
     method: "POST",
     credentials: "include",
     headers: {"Content-Type": "application/x-www-form-urlencoded"},//The data i am sending is already URL-encoded
     body: `postId=${postId}&caption=${encodeURIComponent(caption)}`
-    //when  caption = "Nice post & good work"
-    // postId=12&caption=Nice post & good work, the encodeURIComponent can convert it differenty
-    // postId=12&caption=hello%20world
-    // note your manually converting the data into url encoded format
-  }).then(loadPosts);
+  }).then(
+    loadPosts
+  );
 }
 
 /*  comments   */
 function submitComment(postId) {
   const input = document.getElementById(`comment-input-${postId}`);
   const text = input.value.trim();
-  if (!text) return;
+  if (!text) {
+    showToast("comment is empty",3000);
+    return;
+  }
 
-  fetch("http://localhost:8081/severletpage/add-comment", {
+  fetch("http://localhost:8081/severletpage/UserPost/add-comment", {
     method: "POST",
     credentials: "include",
     headers: {"Content-Type": "application/x-www-form-urlencoded"},
@@ -280,8 +275,14 @@ function submitComment(postId) {
     // throw a error to make the promise fail and got to catch
     throw new Error("Failed to add comment");
   }
+  else{
+          showToast("Comment  added",1000);
+
+  }
 })
-.then(() => loadComments(postId))
+.then(() => 
+  loadComments(postId)
+)
 .catch(err => {
   //err it contails error messsage, errorstack-->  where does error has happened
       console.error(err);
@@ -294,12 +295,14 @@ function submitComment(postId) {
 }//
 
 async function loadComments(postId) {
+  console.log(postId);
   const res = await fetch(
-    `http://localhost:8081/severletpage/comments?postId=${postId}`,
+    `http://localhost:8081/severletpage/UserPost/comments?postId=${postId}`,
     { credentials: "include" }
   );
 
   const comments = await res.json();
+  console.log(comments);
   const div = document.getElementById(`comments-${postId}`);
   div.innerHTML = "";
 
@@ -323,6 +326,7 @@ async function loadComments(postId) {
 }//
 
 function editComment(id, text) {
+  
   const el = document.getElementById(`comment-${id}`);
   el.innerHTML = `
     <input id="edit-comment-${id}" value="${text}">
@@ -332,8 +336,11 @@ function editComment(id, text) {
 
 function saveComment(id) {
   const text = document.getElementById(`edit-comment-${id}`).value;
-
-  fetch("http://localhost:8081/severletpage/edit-comment", {
+ if (!text) {
+    showToast("comment is empty",3000);
+    return;
+  }
+  fetch("http://localhost:8081/severletpage/UserPost/edit-comment", {
     method: "POST",
     credentials: "include",
     headers: {"Content-Type": "application/x-www-form-urlencoded"},
@@ -371,7 +378,7 @@ function saveComment(id) {
 }//
 
 function deleteComment(id, postId) {
-  fetch(`http://localhost:8081/severletpage/delete-comment?commentId=${id}`, {
+  fetch(`http://localhost:8081/severletpage/UserPost/delete-comment?commentId=${id}`, {
     method: "DELETE",
     credentials: "include"
   })

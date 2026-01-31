@@ -1,5 +1,5 @@
 package com.codewithz;
-import com.post.db.dbconnection;
+import com.post.db.DataBaseConnection;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -23,7 +23,7 @@ public class Deletepost extends HttpServlet {
 
         String sql = "DELETE FROM posts WHERE id=? AND user_id=?";
 
-        try (Connection con = dbconnection.getConnection();
+        try (Connection con = DataBaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, postId);
@@ -40,10 +40,7 @@ public class Deletepost extends HttpServlet {
             }
 
         } catch (Exception e) {
-//prints the full error details of an exception to the server console or logs.
-//      res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500
-//    here we writing the response maually
-//    there may db failure
+
             throw new ServletException("Error", e);
 
         }

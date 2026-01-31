@@ -3,35 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <title>Post App</title>
-
-  <!-- Prevent cache -->
+ <!-- Prevent cache -->
   <meta http-equiv="Cache-Control" content="no-store" />
 <!-- not allowing the browser to store the cache -->
 <!-- <link rel="stylesheet" href="css/style.css"> -->
-
-<link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="css/common.css">
 <link rel="stylesheet" href="css/signup.css">
 <link rel="stylesheet" href="css/loginstyle.css">
 <link rel="stylesheet" href="css/htmlstyle.css">
+<link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 
-  <style>
- 
-  </style>
 </head>
+<body> 
 
-
-<!--  # called as fragment identifirer
-   beacuse of which the browser will not reload when we move from one 
-   section to another section of the single page
-
--->
 
 
 
 <!-- single page application -->
 <div id="app"></div>
-
 
 <!-- this showing  for deleting the post -->
   <div id="confirmOverlay" class="confirm-overlay">
@@ -43,7 +33,6 @@
       </div>
     </div>
   </div>
-
 
 
 <script src="router.js"></script>

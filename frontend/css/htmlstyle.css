@@ -202,9 +202,7 @@
 }
 
 /* hidding the original button */
-.hidden-file-input {
-  display: none;
-}
+
 .file-upload {
   display: inline-flex;
   align-items: center;
@@ -247,4 +245,19 @@
   padding: 6px 0;
   font-size: 13px;
   border-bottom: 1px solid #f1f1f1;
+}
+
+
+
+.profile-img {
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #f3f3f3;
+} 
+.post-header {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
 }

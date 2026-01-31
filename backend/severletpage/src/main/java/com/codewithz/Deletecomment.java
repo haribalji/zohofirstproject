@@ -1,5 +1,5 @@
 package com.codewithz;
-import com.post.db.dbconnection;
+import com.post.db.DataBaseConnection;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -20,7 +20,7 @@ public class Deletecomment extends HttpServlet {
         int userId = (int) session.getAttribute("userId");
         int commentId = Integer.parseInt(req.getParameter("commentId"));
         String sql = "DELETE FROM comments WHERE id=? AND user_id=?";
-        try (Connection con = dbconnection.getConnection();
+        try (Connection con = DataBaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, commentId);
             ps.setInt(2, userId);
@@ -28,7 +28,6 @@ public class Deletecomment extends HttpServlet {
 
             if (deleted == 0) {
                 res.setStatus(HttpServletResponse.SC_FORBIDDEN);
-//                you do not have permisssion
             } else {
                 res.setStatus(HttpServletResponse.SC_OK);
             }

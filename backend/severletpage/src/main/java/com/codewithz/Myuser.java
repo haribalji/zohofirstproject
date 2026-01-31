@@ -9,7 +9,6 @@ public class Myuser extends HttpServlet {
             throws IOException {
 
         res.setContentType("application/json");
-
         HttpSession session = req.getSession(false);
 
         //  Not logged in

@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- //declaring  the xml file -->
-
-
-<!-- the link stats -->
-<!-- XML follows Jakarta EE rules -->
 
 <web-app
         xmlns="https://jakarta.ee/xml/ns/jakartaee"
@@ -12,34 +7,4 @@
                         https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
         version="6.0">
 
-  <display-name>Social App</display-name>
-
-  <!-- CORS FILTER -->
-  <filter>
-    <filter-name>SimpleCorsFilter</filter-name>
-    <filter-class>com.filter.SimpleCorsFilter</filter-class>
- <!-- loaction of the filter is exists -->
-  </filter>
-
-  <filter-mapping>
-  <!-- it os used for executing the filter -->
-    <filter-name>SimpleCorsFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-    <!-- to which url this filter is applied -->
-  </filter-mapping>
-
-
-
-
 </web-app>
-
-
-
-<!-- the purpose of the web.xml file to map the url with serverlet
-it is used to  tell the tomcat which servlet handles which request -->
-<!-- 
-tomcat reads web.xml once it starts
-from web.xml, Tomcat learns
-Which servlets exist
-Which URLs map to which servlets
-Which filters apply to which URLs -->

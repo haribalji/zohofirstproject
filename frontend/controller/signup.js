@@ -1,16 +1,13 @@
 function signup() {
-
   // Clear old errors
   document.getElementById("usernameError").innerText = "";
   document.getElementById("emailError").innerText = "";
   document.getElementById("passwordError").innerText = "";
-
+  const image=document.getElementById("profileImage").files[0];
   const username = document.getElementById("username").value.trim();
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
-
   let isValid = true;
-
   // Username validation
   if (username === "") {
     document.getElementById("usernameError").innerText = "Username is required";
@@ -21,7 +18,6 @@ function signup() {
   }
   // Email validation
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
   // here the characters before @ should not have spaces
   // after @ should not have spaces
   // 2 @ is not allowed
@@ -57,41 +53,46 @@ else if (!passwordPattern.test(password)) {
   isValid = false;
 }
 
-
+ if (!image) {
+    document.getElementById("imageError").innerText = "Image is required";
+         isValid = false;
+  }
   // Stop if validation fails
   if (!isValid) return;
+const formData = new FormData();
+if (document.getElementById("profileImage").files.length > 0) {
+  formData.append("image", document.getElementById("profileImage").files[0]);
+}
+else{
+  showToast("image requried",2000);
+  return;
+}
+formData.append("username",username);
+formData.append("email",email);
+formData.append("password",password);
+
 
   // Send request only if valid
-  fetch("http://localhost:8081/severletpage/register", {
+  fetch("http://localhost:8081/severletpage/auth/register", {
     method: "POST",
     credentials: "include",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
-      // Form data is sent as key=value pairs joined by &, and special characters 
-      // are URL-encoded. with some ther character
-    },
-    body: new URLSearchParams({
-      username: username,
-      email: email,
-      password: password
-    })
+        body: formData
   })
   .then(res => res.json())
   .then(data => {
     if (data.success) {
-      // alert("Signup successful");
       showToast("Signup successful! Please login.",3000);
 
    
-      location.hash="login";
+      location.hash="#login";
 
     } else {
-            showToast("Signup failed",3000);
+            showToast(data.message,3000);
 
     }
   })
   .catch(err => {
-    alert("Server error");
+    alert("Server error",err.message);
     console.error(err);
   });
 }
@@ -101,56 +102,15 @@ function togglePassword() {
 }
 
 
-
-// on typing it self we are validationg 
-// function validateUsername() {
-//   // const usernameInput = document.getElementById("username");
-//   const errorDiv = document.getElementById("usernameError");
-//   // errorDiv.textContent = "";
-
-// //   const value = usernameInput.value.trim();
-// //   // Empty check
-// //   if (value === "") {
-// //     errorDiv.textContent = "Username is required";
-// //     return false;
-// //   }
-
-// //   // Minimum length
-// //   if (value.length < 3) {
-// //     errorDiv.textContent = "Username must be at least 3 characters maximum 20 characters ";
-// //     return false;
-// //   }
-// //  if (value.length >20) {
-// //     errorDiv.textContent = "maximum 20 characters allowed";
-// //     return false;
-// //   }
-// //   // Only letters & numbers
-// //   const regex = /^[a-zA-Z0-9_]+$/;
-// //   if (!regex.test(value)) {
-// //     errorDiv.textContent = "Only letters, numbers and _ allowed";
-// //     return false;
-// //   }
-// //   // Valid
-// //   errorDiv.textContent = "";
-// //   return true;
-// }
-
-
-
-// function validatePassword() {
-//   const input = document.getElementById("password");
-//   const error = document.getElementById("passwordError");
-//  if (input.value.length <= 16) {
-//    console.log("valid only");
-//     input.value = input.value.slice(0, 16);
-//     error.textContent = "";
-//     return;
-//   }
-//   else if (input.value.length > 16) {
-//     input.value = input.value.slice(0, 16);
-//     error.textContent = "Maximum 16 characters allowed";
-//     return false;
-//   }
- 
-// }
-
+document.addEventListener("change", function (event) {
+  console.log("Change detected:", event.target);
+  if (event.target && event.target.id === "profileImage") {
+    const fileNameSpan = document.getElementById("fileName");
+//by getting the file name from the file input
+    if (event.target.files.length > 0) {
+      fileNameSpan.textContent = event.target.files[0].name;//here we will get the file name
+    } else {
+      fileNameSpan.textContent = "No file selected";
+    }
+  }
+});//

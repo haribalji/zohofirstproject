@@ -1,5 +1,5 @@
 package com.codewithz;
-import com.post.db.dbconnection;
+import com.post.db.DataBaseConnection;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -21,7 +21,7 @@ public class Editcomment extends HttpServlet {
         String comment = req.getParameter("comment");
         String sql = "UPDATE comments SET comment=? WHERE id=? AND user_id=?";
 //                id is comment id
-        try (Connection con = dbconnection.getConnection();
+        try (Connection con = DataBaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, comment);
@@ -39,7 +39,6 @@ public class Editcomment extends HttpServlet {
             }
 
         } catch (Exception e) {
-            // e.printStackTrace();//printing the error in console
             throw new ServletException(" error", e);
         }
     }

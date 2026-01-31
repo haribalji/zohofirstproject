@@ -49,13 +49,15 @@ const passwordPattern =
     if (!isValid) return;
 
     //  Send request only if valid
-    fetch("http://localhost:8081/severletpage/login", {
+    fetch("http://localhost:8081/severletpage/auth/login", {
       method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
       },
       body: new URLSearchParams({
+        //create URL-encoded key–value pairs.create URL-encoded key–value pairs.
+
         username: username,
         password: password
       })
@@ -65,8 +67,6 @@ const passwordPattern =
       if (data.success) {
         localStorage.setItem("auth", "true");
       showToast("Login successful!",3000);
-
-        
        location.hash="home";
       } else {
         document.getElementById("passwordError").innerText =
@@ -83,52 +83,3 @@ const passwordPattern =
     });
   }
 
-// for validation 
-//   function validateUsername() {
-//   const usernameInput = document.getElementById("username");
-//   const errorDiv = document.getElementById("usernameError");
-//   const value = usernameInput.value.trim();
-//   // Empty check
-//   if (value === "") {
-//     errorDiv.textContent = "Username is required";
-//     return false;
-//   }
-//   // Minimum length
-//   if (value.length < 3) {
-//     error.textContent = "Username must be at least 3 characters and maximum 20 characters";
-//     return false;
-//   }
-//  if (value.length>20) {
-//     errorDiv.textContent = "maximum 20 characters allowed";
-//     return false;
-//   }
-//   // Only letters & numbers
-//   const regex = /^[a-zA-Z0-9_]+$/;
-//   if (!regex.test(value)) {
-//     errorDiv.textContent = "Only letters, numbers and _ allowed";
-//     return false;
-//   }
-
-//   // Valid
-//   errorDiv.textContent = "";
-//   return true;
-// }
-
-
-
-// function validatePassword() {
-//   const input = document.getElementById("password");
-//   const error = document.getElementById("passwordError");
-//  if (input.value.length <= 16) {
-//    console.log("valid only");
-//     input.value = input.value.slice(0, 16);
-//     error.textContent = "";
-//     return;
-//   }
-//   else if (input.value.length > 16) {
-//     input.value = input.value.slice(0, 16);
-//     error.textContent = "Maximum 16 characters allowed";
-//     return;
-//   }
- 
-// }

@@ -10,9 +10,7 @@ import java.io.IOException;
 
 @WebServlet("/logout")
 public class Logout extends HttpServlet {
-    public void doGet(HttpServletRequest req, HttpServletResponse res)
-            throws IOException {
-
+    public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
         HttpSession session = req.getSession(false);
         if (session != null) {
             session.invalidate(); //  destroy session

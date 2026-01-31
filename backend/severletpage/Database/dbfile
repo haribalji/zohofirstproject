@@ -1,0 +1,64 @@
+schema design-->https://dbdiagram.io/d/postdb-schema-6979a542bd82f5fce2d7f140
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,//it used for auto increment + accending order,if any value lost once it will be never used again
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(100),
+    email VARCHAR(100) NOT NULL,
+    userimagepath VARCHAR(100),
+    auth_provider VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP//it will take current time of the user insertion
+);
+CREATE TABLE posts (
+    id SERIAL PRIMARY KEY,
+    image_path TEXT, //it is used when data length is unknown
+    caption text,
+    user_id int NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id)
+    REFERENCES users(id)
+);
+
+
+CREATE TABLE comments (
+    id SERIAL PRIMARY KEY,
+    post_id int NOT NULL,
+    user_id int NOT NULL,
+    comment text,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+        FOREIGN KEY (post_id)
+        REFERENCES posts(id)
+        ,
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+);
+
+// inorder to insert the user values
+INSERT INTO users (username, email, password, auth_provider,userimagepath) " + "VALUES (?, ?, encode(digest(?, 'sha256'), 'hex'), ?,?)
+
+//insert the post value in db
+INSERT INTO posts (user_id, image_path, caption) VALUES (?, ?, ?)
+
+//deletion of post
+DELETE FROM posts WHERE id=? AND user_id=?
+
+//deleting the comments
+DELETE FROM comments WHERE id=? AND user_id=?
+
+//adding  commments
+INSERT INTO comments (post_id, user_id, comment) VALUES (?, ?, ?)
+
+//edit the post caption
+UPDATE posts SET caption=? WHERE id=? AND user_id=?
+
+//edit the comments of corresponding post
+UPDATE comments SET comment=? WHERE id=? AND user_id=?
+
+//here inner joins is used,inner joins can be used as- JOIN
+
+//getting all the posts
+SELECT p.id,p.user_id, p.image_path, p.caption, u.username,u.userimagepath " + "FROM posts p JOIN users u ON p.user_id = u.id " + "ORDER BY p.id DESC
+//loading comments
+SELECT c.id, c.comment, c.user_id, u.username " + "FROM comments c JOIN users u ON c.user_id = u.id " + "WHERE c.post_id=? ORDER BY c.id
